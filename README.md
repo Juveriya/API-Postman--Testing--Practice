@@ -28,6 +28,13 @@ Created a Collection named Contact List with 2 folders:
 - Negative Tests
 
 
+\\\\\\
+Command to run the Collection using Newman: 
+
+newman run Contact_List_postman_collection.json -e Contact_List_postman_environment.json --env-var "baseURL=https://thinking-tester-contact-list.herokuapp.com"
+
+\\\\\\
+
 
 Pet Store API: https://petstore.swagger.io
 
