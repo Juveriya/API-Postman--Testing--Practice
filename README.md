@@ -1,8 +1,11 @@
 # API-Postman--Testing--Practice
 API Testing practice using Postman, Newman and Swagger
+This repository showcases hands-on API testing using Postman, Newman, and Swagger. It includes test cases for real-world APIs, environment setup, and command-line execution using Newman.
 
-Steps to start:
+
+Tools Required:
 Download Postman, Node, Newman, etc.
+
 
 Links for reference: 
 
@@ -12,7 +15,9 @@ Node installation link: https://nodejs.org
 
 Download Newman in CMD using following command: npm install -g newman
 
-Application Links Used for testing practice: 
+
+
+Projects Included
 
 Contact List app: https://thinking-tester-contact-list.herokuapp.com
 
@@ -21,11 +26,15 @@ Contact List app: https://thinking-tester-contact-list.herokuapp.com
 - Postman documentation for Contact List app: https://documenter.getpostman.com/view/4012288/2s8YRiKDbu
 
 
-Created a Collection named Contact List with 2 folders: 
+Collection Structure: 
 
 - Basic Endpoint Tests
   
 - Negative Tests
+
+## 🔗 Files
+- [Contact_List_postman_collection.json](Contact_List_postman_collection.json)
+- [Contact_List_postman_environment.json](Contact_List_postman_environment.json)
 
 
 \\\\\\
@@ -36,6 +45,13 @@ newman run Contact_List_postman_collection.json -e Contact_List_postman_environm
 \\\\\\
 
 
+
+Postman Docs: https://learning.postman.com/docs/introduction/overview/
+
+
+
+
+In-Progress:---
 Pet Store API: https://petstore.swagger.io
 
 Poke API: https://pokeapi.co
@@ -43,4 +59,3 @@ Poke API: https://pokeapi.co
 
 
 
-Postman Docs: https://learning.postman.com/docs/introduction/overview/
