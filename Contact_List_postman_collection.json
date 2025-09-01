@@ -1,0 +1,669 @@
+{
+	"info": {
+		"_postman_id": "94a0ca29-c9c0-4214-94c5-1dee099fef91",
+		"name": "Contact List",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11920149"
+	},
+	"item": [
+		{
+			"name": "Basic Endpoint Tests",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set(\"token\", jsonData.token);\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"noor.sayyed@fake.com\",\r\n    \"password\": \"noor123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contact List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"correct contact is returned\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"hira.khan@fake.com\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/contacts",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//pm.test(\"Status code is 200\", function () {\r",
+									"//    pm.expect(pm.response.code).to.equal(200);\r",
+									"//});\r",
+									"\r",
+									"// Set environment variables for the contact details\r",
+									"const contactDetails = pm.response.json();\r",
+									"pm.environment.set(\"contactid\", contactDetails._id);\r",
+									"pm.environment.set(\"ContactFirstName\", contactDetails.firstName);\r",
+									"pm.environment.set(\"ContactLastName\", contactDetails.lastName);\r",
+									"pm.environment.set(\"ContactEmail\", contactDetails.email);\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"Contact created successfully\", function () {\r",
+									"    pm.expect(contactDetails.firstName).to.equal(pm.environment.get(\"ContactFirstName\"));\r",
+									"    pm.expect(contactDetails.lastName).to.equal(pm.environment.get(\"ContactLastName\"));\r",
+									"    pm.expect(contactDetails.email).to.equal(pm.environment.get(\"ContactEmail\"));\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGIxNGI5NDc3MGI1MDAwMTU0MWFhMTQiLCJpYXQiOjE3NTY0NTAxOTJ9.xJUJ9PTmm8ssv8VvnXfzfXxUSB33DAsY1tZ_3-o_MXw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"{{ContactFirstName}}\",\r\n    \"lastName\": \"{{ContactLastName}}\",\r\n    \"birthdate\": \"1977-07-07\",\r\n    \"email\": \"{{ContactEmail}}\",\r\n    \"phone\": \"8005551000\",\r\n    \"street1\": \"123 Main St.\",\r\n    \"street2\": \"Apartment Q\",\r\n    \"city\": \"New York\",\r\n    \"stateProvince\": \"NY\",\r\n    \"postalCode\": \"12345\",\r\n    \"country\": \"USA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/contacts",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGIxNGI5NDc3MGI1MDAwMTU0MWFhMTQiLCJpYXQiOjE3NTY0NTAxOTJ9.xJUJ9PTmm8ssv8VvnXfzfXxUSB33DAsY1tZ_3-o_MXw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"firstName\": \"{{ContactFirstName}}\",\r\n        \"lastName\": \"{{ContactLastName}}\",\r\n     \"birthdate\": \"1977-07-07\",\r\n        \"email\": \"{{ContactEmail}}\",\r\n        \"phone\": \"8005551000\",\r\n        \"street1\": \"123 Main St.\",\r\n        \"street2\": \"Apartment Q\",\r\n        \"city\": \"New York\",\r\n        \"stateProvince\": \"NY\",\r\n        \"postalCode\": \"12345\",\r\n        \"country\": \"USA\",\r\n        \"owner\": \"68b14b94770b50001541aa14\",\r\n        \"__v\": 0\r\n\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/contacts/{{contactid}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"contacts",
+								"{{contactid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"correct contact email is returned\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"testeremail@fake.com\");\r",
+									"});\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.test(\"Correct first name is returned\", function () {\r",
+									"    pm.expect(jsonData.ContactFirstName).to.eql(pm.environment.ContactFirstName);\r",
+									"});\r",
+									"pm.test(\"Correct last name is returned\", function () {\r",
+									"    pm.expect(jsonData.ContactLastName).to.eql(pm.environment.ContactLastName);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGIxNGI5NDc3MGI1MDAwMTU0MWFhMTQiLCJpYXQiOjE3NTY0NTAxOTJ9.xJUJ9PTmm8ssv8VvnXfzfXxUSB33DAsY1tZ_3-o_MXw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/contacts/{{contactid}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"contacts",
+								"{{contactid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGIxNGI5NDc3MGI1MDAwMTU0MWFhMTQiLCJpYXQiOjE3NTY0NTAxOTJ9.xJUJ9PTmm8ssv8VvnXfzfXxUSB33DAsY1tZ_3-o_MXw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/contacts/68b57f7748e59600152c62f4",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"contacts",
+								"68b57f7748e59600152c62f4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Recently Added Contact Data",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGIxNGI5NDc3MGI1MDAwMTU0MWFhMTQiLCJpYXQiOjE3NTY0NTAxOTJ9.xJUJ9PTmm8ssv8VvnXfzfXxUSB33DAsY1tZ_3-o_MXw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/contacts/68b15419770b50001541aa37",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"contacts",
+								"68b15419770b50001541aa37"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Negative Tests",
+			"item": [
+				{
+					"name": "Get Contact List Unauthorized",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 \", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/contacts",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contact - Not Found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//pm.test(\"Status code is 200\", function () {\r",
+									"  //  pm.response.to.have.status(200);\r",
+									"//});\r",
+									"\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGIxNGI5NDc3MGI1MDAwMTU0MWFhMTQiLCJpYXQiOjE3NTY0NTAxOTJ9.xJUJ9PTmm8ssv8VvnXfzfXxUSB33DAsY1tZ_3-o_MXw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/contacts/68b14bdf770b500015415200",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"contacts",
+								"68b14bdf770b500015415200"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Contact - Missing Required field",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Missing contact information error message\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"`firstName` is required\");\r",
+									"});\r",
+									"pm.test(\"Content-Type is application/JSON\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGIxNGI5NDc3MGI1MDAwMTU0MWFhMTQiLCJpYXQiOjE3NTY0NTAxOTJ9.xJUJ9PTmm8ssv8VvnXfzfXxUSB33DAsY1tZ_3-o_MXw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"\",\r\n    \"lastName\": \"Qazi\",\r\n    \"birthdate\": \"1999-05-07\",\r\n    \"email\": \"qazi.hamza@fake.com\",\r\n    \"phone\": \"8005551022\",\r\n    \"street1\": \"123 Main St.\",\r\n    \"street2\": \"Apartment Q\",\r\n    \"city\": \"Delhi\",\r\n    \"stateProvince\": \"IN\",\r\n    \"postalCode\": \"12345\",\r\n    \"country\": \"INDIA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/contacts",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Contact - Last Name too long",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(\"Validation for entered char too long\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"longer than the maximum allowed length\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGIxNGI5NDc3MGI1MDAwMTU0MWFhMTQiLCJpYXQiOjE3NTY0NTAxOTJ9.xJUJ9PTmm8ssv8VvnXfzfXxUSB33DAsY1tZ_3-o_MXw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Hamza\",\r\n    \"lastName\": \"Qazi Mohammad Hamza Q\",\r\n    \"birthdate\": \"1999-05-07\",\r\n    \"email\": \"qazi.hamza@fake.com\",\r\n    \"phone\": \"8005551022\",\r\n    \"street1\": \"123 Main St.\",\r\n    \"street2\": \"Apartment Q\",\r\n    \"city\": \"Delhi\",\r\n    \"stateProvince\": \"IN\",\r\n    \"postalCode\": \"12345\",\r\n    \"country\": \"INDIA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/contacts",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contact - Invalid Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(\"Invalid contact data error message\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Email is invalid\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGIxNGI5NDc3MGI1MDAwMTU0MWFhMTQiLCJpYXQiOjE3NTY0NTAxOTJ9.xJUJ9PTmm8ssv8VvnXfzfXxUSB33DAsY1tZ_3-o_MXw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n         \"_id\": \"68b18ec4dcad6b00153417e4\",\r\n        \"firstName\": \"Prunella\",\r\n        \"lastName\": \"Prunewhip\",\r\n        \"birthdate\": \"1977-07-07\",\r\n        \"email\": \"pprunewhip@\",\r\n        \"phone\": \"8005551000\",\r\n        \"street1\": \"123 Main St.\",\r\n        \"street2\": \"Apartment Q\",\r\n        \"city\": \"New York\",\r\n        \"stateProvince\": \"NY\",\r\n        \"postalCode\": \"12345\",\r\n        \"country\": \"USA\",\r\n        \"owner\": \"68b14b94770b50001541aa14\",\r\n        \"__v\": 0\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/contacts/68b18ec4dcad6b00153417e4",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"contacts",
+								"68b18ec4dcad6b00153417e4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"pm.test(\"Response time is less than 3000ms\", function () {\r",
+					"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": ""
+		}
+	]
+}
